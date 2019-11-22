@@ -1,0 +1,79 @@
+package sample;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
+public class Controller {
+
+    int pizzaNum;
+    private float totCost;
+
+    @FXML
+    private ToggleGroup Size;
+    @FXML
+    private ToggleGroup Cheese;
+    @FXML
+    private ToggleGroup Ham;
+    @FXML
+    private ToggleGroup Pineapple;
+    @FXML
+    private ToggleGroup Green_pepper;
+
+    @FXML
+    private Label totalPizzaCost;
+
+    @FXML
+    private Label notAllowed;
+
+    @FXML
+    private TextArea completeOrder;
+
+    @FXML
+    private TextField quantityPizza;
+
+    @FXML
+    private Label currentPizzaCost;
+
+    @FXML
+    void costPizza(ActionEvent event) {
+        String size = ((RadioButton)Size.getSelectedToggle()).getId().toString();
+        String cheese = ((RadioButton)Cheese.getSelectedToggle()).getId().toString();
+        String pineapple = ((RadioButton)Pineapple.getSelectedToggle()).getId().toString();
+        String greenpep = ((RadioButton)Green_pepper.getSelectedToggle()).getId().toString();
+        String ham = ((RadioButton)Ham.getSelectedToggle()).getId().toString();
+
+
+        try{
+            Pizza pizza = new Pizza(size, cheese, pineapple, greenpep, ham);
+            currentPizzaCost.setText("The cost for this pizza is: $" + pizza.getCost() + 0);
+        }catch(IllegalPizza e){
+            currentPizzaCost.setText(e.getMessage());
+        }
+    }
+
+    @FXML
+    void savePizza(ActionEvent event) {
+        String size = ((RadioButton)Size.getSelectedToggle()).getId().toString();
+        String cheese = ((RadioButton)Cheese.getSelectedToggle()).getId().toString();
+        String pineapple = ((RadioButton)Pineapple.getSelectedToggle()).getId().toString();
+        String greenpep = ((RadioButton)Green_pepper.getSelectedToggle()).getId().toString();
+        String ham = ((RadioButton)Ham.getSelectedToggle()).getId().toString();
+
+        try{
+
+            pizzaNum = Integer.parseInt(quantityPizza.getText());
+            LineItem item = new LineItem(pizzaNum,new Pizza(size, cheese, pineapple, greenpep, ham));
+            String completeOrderText = completeOrder.getText();
+            completeOrderText += "\n" + item.toString();
+            completeOrder.setText(completeOrderText);
+            totCost += item.getCost();
+            totalPizzaCost.setText("$" + totCost +0);
+
+        }catch(IllegalPizza e){
+        }
+    }
+
+
+
+}
